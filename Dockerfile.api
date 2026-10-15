@@ -1,0 +1,10 @@
+FROM python:3.11-slim
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 \
+    RESEARCHPILOT_DATA_DIR=/app/data RESEARCHPILOT_CHROMA_PATH=/app/chroma_db
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY researchpilot/ ./researchpilot/
+RUN mkdir -p /app/data/pdfs /app/chroma_db
+EXPOSE 8000
+CMD ["uvicorn", "researchpilot.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

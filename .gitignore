@@ -1,0 +1,36 @@
+.venv/
+.env
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.DS_Store
+*.pyc
+chroma_db/
+data/pdfs/*
+data/corpus.json
+data/benchmark_results.json
+!data/pdfs/.gitkeep
+
+# API keys and environment variables
+.env
+.env.*
+!.env.example
+
+# Python virtual environment
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local data and databases
+*.sqlite3
+chroma_db/
+chroma_store/
+
+# macOS
+.DS_Store

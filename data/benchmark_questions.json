@@ -1,0 +1,278 @@
+[
+  {
+    "id": "q001",
+    "question": "What is the main contribution of the Transformer architecture?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:1:0",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:2:160",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:10:160"
+    ]
+  },
+  {
+    "id": "q002",
+    "question": "How does the Transformer differ from recurrent and convolutional sequence transduction models?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:1:0",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:2:160",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:10:160"
+    ]
+  },
+  {
+    "id": "q003",
+    "question": "Why do recurrent networks limit parallelization during training?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:2:0"
+    ]
+  },
+  {
+    "id": "q004",
+    "question": "How does self-attention reduce the path length between distant sequence positions?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:2:320",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:6:480"
+    ]
+  },
+  {
+    "id": "q005",
+    "question": "What are the main components of a Transformer encoder layer?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:3:0"
+    ]
+  },
+  {
+    "id": "q006",
+    "question": "How many layers are in the Transformer encoder and decoder?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:3:0"
+    ]
+  },
+  {
+    "id": "q007",
+    "question": "What is the purpose of residual connections and layer normalization in the Transformer?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:3:0"
+    ]
+  },
+  {
+    "id": "q008",
+    "question": "How does the Transformer decoder prevent attention to future output positions?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:3:160",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:5:160"
+    ]
+  },
+  {
+    "id": "q009",
+    "question": "How is scaled dot-product attention computed from queries keys and values?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:4:0"
+    ]
+  },
+  {
+    "id": "q010",
+    "question": "Why are attention dot products divided by the square root of the key dimension?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:4:160",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:4:320"
+    ]
+  },
+  {
+    "id": "q011",
+    "question": "What is the statistical argument that query-key dot products grow with key dimension?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:4:320"
+    ]
+  },
+  {
+    "id": "q012",
+    "question": "How does additive attention differ from scaled dot-product attention?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:4:0",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:4:160"
+    ]
+  },
+  {
+    "id": "q013",
+    "question": "What is multi-head attention and why is it useful?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:4:160",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:5:0"
+    ]
+  },
+  {
+    "id": "q014",
+    "question": "How many attention heads does the base Transformer use and what are their dimensions?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:5:0"
+    ]
+  },
+  {
+    "id": "q015",
+    "question": "What are the three ways multi-head attention is used in the Transformer?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:5:0",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:5:160"
+    ]
+  },
+  {
+    "id": "q016",
+    "question": "How does encoder self-attention differ from encoder-decoder attention?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:5:0",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:5:160"
+    ]
+  },
+  {
+    "id": "q017",
+    "question": "What is the formula and hidden dimension of the position-wise feed-forward network?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:5:320"
+    ]
+  },
+  {
+    "id": "q018",
+    "question": "Why are positional encodings needed in the Transformer?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:6:0"
+    ]
+  },
+  {
+    "id": "q019",
+    "question": "Why did the authors choose sinusoidal positional encodings?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:6:160"
+    ]
+  },
+  {
+    "id": "q020",
+    "question": "What computational complexity and sequential-operation counts does self-attention have compared with recurrence?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:6:0"
+    ]
+  },
+  {
+    "id": "q021",
+    "question": "What are the three criteria used to compare self-attention recurrent and convolutional layers?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:6:320"
+    ]
+  },
+  {
+    "id": "q022",
+    "question": "What datasets and vocabulary sizes were used for English-German and English-French translation training?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:7:160"
+    ]
+  },
+  {
+    "id": "q023",
+    "question": "What hardware and training durations were used for the Transformer base and big models?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:7:320"
+    ]
+  },
+  {
+    "id": "q024",
+    "question": "Which optimizer and learning-rate schedule were used for training the Transformer?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:7:320"
+    ]
+  },
+  {
+    "id": "q025",
+    "question": "What BLEU scores did the Transformer achieve on WMT 2014 English-German and English-French translation?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:8:0",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:1:0"
+    ]
+  },
+  {
+    "id": "q026",
+    "question": "How does Transformer training cost compare with previous translation models?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:8:0",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:8:160"
+    ]
+  },
+  {
+    "id": "q027",
+    "question": "What beam search settings were used for translation inference?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:8:320"
+    ]
+  },
+  {
+    "id": "q028",
+    "question": "How does the number of attention heads affect translation performance in the ablation experiments?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:9:160"
+    ]
+  },
+  {
+    "id": "q029",
+    "question": "What did the authors find when replacing sinusoidal positional encodings with learned positional embeddings?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:6:160",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:9:160"
+    ]
+  },
+  {
+    "id": "q030",
+    "question": "What English constituency parsing experiments and results demonstrate Transformer generalization?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:9:320",
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:10:0"
+    ]
+  },
+  {
+    "id": "q031",
+    "question": "What do the attention visualizations show about long-distance dependencies?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:13:0"
+    ]
+  },
+  {
+    "id": "q032",
+    "question": "What do the visualizations suggest about anaphora resolution by attention heads?",
+    "relevant_ids": [
+      "61618024c611cb1d46bcd00402a778a7a4066181aea9ee202b6f2334ffcc1989:14:0"
+    ]
+  },
+  {
+    "id": "q033",
+    "question": "Which six extraordinary ability criteria does the EB-1A template claim to satisfy?",
+    "relevant_ids": [
+      "2566f7fb896aaee21b610560016c6c22df9159cc2c6cc1ea594f4a1edb2eb907:1:0",
+      "2566f7fb896aaee21b610560016c6c22df9159cc2c6cc1ea594f4a1edb2eb907:1:160"
+    ]
+  },
+  {
+    "id": "q034",
+    "question": "What future contributions does the EB-1A template petitioner propose?",
+    "relevant_ids": [
+      "2566f7fb896aaee21b610560016c6c22df9159cc2c6cc1ea594f4a1edb2eb907:2:0"
+    ]
+  },
+  {
+    "id": "q035",
+    "question": "What evidence of judging the work of others is described in the EB-1A template?",
+    "relevant_ids": [
+      "2566f7fb896aaee21b610560016c6c22df9159cc2c6cc1ea594f4a1edb2eb907:6:0"
+    ]
+  },
+  {
+    "id": "q036",
+    "question": "Which sections in the EB-1A template address authorship and original contributions?",
+    "relevant_ids": [
+      "2566f7fb896aaee21b610560016c6c22df9159cc2c6cc1ea594f4a1edb2eb907:9:0",
+      "2566f7fb896aaee21b610560016c6c22df9159cc2c6cc1ea594f4a1edb2eb907:10:0"
+    ]
+  },
+  {
+    "id": "q037",
+    "question": "What documents are listed in the EB-1A template index of exhibits?",
+    "relevant_ids": [
+      "2566f7fb896aaee21b610560016c6c22df9159cc2c6cc1ea594f4a1edb2eb907:18:0"
+    ]
+  }
+]

@@ -1,0 +1,35 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5-mini}
+      RESEARCHPILOT_DATA_DIR: /app/data
+      RESEARCHPILOT_CHROMA_PATH: /app/chroma_db
+    volumes:
+      - research_data:/app/data
+      - chroma_data:/app/chroma_db
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 180s
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "127.0.0.1:8501:8501"
+    environment:
+      RESEARCHPILOT_API_URL: http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+volumes:
+  research_data:
+  chroma_data:
