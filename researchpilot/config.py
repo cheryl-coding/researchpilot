@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
+
 load_dotenv()
 DATA_DIR = Path(os.getenv("RESEARCHPILOT_DATA_DIR", "data"))
 PDF_DIR = DATA_DIR / "pdfs"

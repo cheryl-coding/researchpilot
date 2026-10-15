@@ -1,7 +1,9 @@
 from collections import defaultdict
 
-def reciprocal_rank_fusion(ranked_lists: list[list[dict]], k: int = 60,
-                           top_k: int = 5) -> list[dict]:
+
+def reciprocal_rank_fusion(
+    ranked_lists: list[list[dict]], k: int = 60, top_k: int = 5
+) -> list[dict]:
     if k <= 0 or top_k <= 0:
         raise ValueError("k and top_k must be positive")
     scores = defaultdict(float)
@@ -18,6 +20,7 @@ def reciprocal_rank_fusion(ranked_lists: list[list[dict]], k: int = 60,
     ids = sorted(scores, key=lambda key: (-scores[key], key))[:top_k]
     return [dict(documents[key], rrf_score=scores[key]) for key in ids]
 
+
 class HybridRetriever:
     def __init__(self, bm25, dense, rrf_k: int = 60, candidate_k: int = 20):
         self.bm25, self.dense = bm25, dense
@@ -27,5 +30,6 @@ class HybridRetriever:
         if top_k <= 0:
             raise ValueError("top_k must be positive")
         n = max(top_k, self.candidate_k)
-        return reciprocal_rank_fusion([self.bm25.search(query, n),
-                                       self.dense.search(query, n)], self.rrf_k, top_k)
+        return reciprocal_rank_fusion(
+            [self.bm25.search(query, n), self.dense.search(query, n)], self.rrf_k, top_k
+        )

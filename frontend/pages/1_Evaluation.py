@@ -1,4 +1,5 @@
 import os
+
 import pandas as pd
 import plotly.express as px
 import requests
@@ -23,10 +24,22 @@ a, b, c = st.columns(3)
 a.metric("Best Recall@5", f"{df['recall_at_5'].max():.3f}")
 b.metric("Best MRR@5", f"{df['mrr_at_5'].max():.3f}")
 c.metric("Fastest mean latency", f"{df['latency_ms'].min():.1f} ms")
-quality = df.melt(id_vars="method", value_vars=["recall_at_5", "mrr_at_5"],
-                  var_name="metric", value_name="score")
-st.plotly_chart(px.bar(quality, x="method", y="score", color="metric", barmode="group",
-                       title="Retrieval quality", range_y=[0, 1]), use_container_width=True)
-st.plotly_chart(px.bar(df, x="method", y="latency_ms", title="Mean retrieval latency"),
-                use_container_width=True)
+quality = df.melt(
+    id_vars="method", value_vars=["recall_at_5", "mrr_at_5"], var_name="metric", value_name="score"
+)
+st.plotly_chart(
+    px.bar(
+        quality,
+        x="method",
+        y="score",
+        color="metric",
+        barmode="group",
+        title="Retrieval quality",
+        range_y=[0, 1],
+    ),
+    use_container_width=True,
+)
+st.plotly_chart(
+    px.bar(df, x="method", y="latency_ms", title="Mean retrieval latency"), use_container_width=True
+)
 st.caption("Scores reflect your manually labeled benchmark; they are not generated examples.")

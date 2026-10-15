@@ -1,4 +1,5 @@
 import os
+
 import requests
 import streamlit as st
 
@@ -15,8 +16,11 @@ with st.sidebar:
     if uploaded and st.button("Index document", use_container_width=True):
         try:
             with st.spinner("Indexing document..."):
-                res = requests.post(f"{API_URL}/documents/upload",
-                    files={"file": (uploaded.name, uploaded.getvalue(), "application/pdf")}, timeout=300)
+                res = requests.post(
+                    f"{API_URL}/documents/upload",
+                    files={"file": (uploaded.name, uploaded.getvalue(), "application/pdf")},
+                    timeout=300,
+                )
                 res.raise_for_status()
                 st.success(f"Indexed {res.json()['filename']}")
         except requests.RequestException as exc:
@@ -31,6 +35,7 @@ with st.sidebar:
     except requests.RequestException:
         st.warning("Backend unavailable")
 
+
 def render(message):
     st.markdown(message["content"])
     if message.get("sources"):
@@ -42,6 +47,7 @@ def render(message):
         with st.expander("Agent action trace"):
             for event in message["trace"]:
                 st.text(event)
+
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -55,13 +61,19 @@ if question:
     with st.chat_message("assistant"):
         try:
             with st.spinner("Retrieving and grading evidence..."):
-                res = requests.post(f"{API_URL}/chat",
+                res = requests.post(
+                    f"{API_URL}/chat",
                     json={"question": question, "retrieval_mode": mode, "max_attempts": attempts},
-                    timeout=300)
+                    timeout=300,
+                )
                 res.raise_for_status()
                 data = res.json()
-            message = {"role": "assistant", "content": data["answer"],
-                       "sources": data["sources"], "trace": data["trace"]}
+            message = {
+                "role": "assistant",
+                "content": data["answer"],
+                "sources": data["sources"],
+                "trace": data["trace"],
+            }
             render(message)
             st.session_state.messages.append(message)
         except requests.RequestException as exc:

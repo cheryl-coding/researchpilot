@@ -1,82 +1,133 @@
-import json
+from __future__ import annotations
+
 import logging
-import re
-import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
-import fitz
+from typing import Annotated
+from uuid import uuid4
+
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.concurrency import run_in_threadpool
-from researchpilot.api.schemas import ChatRequest, ChatResponse, DocumentInfo, UploadResponse
-from researchpilot.api.services import ResearchPilotService
-from researchpilot.config import BENCHMARK_PATH
 
-MAX_PDF_BYTES = 20 * 1024 * 1024
+from researchpilot.api.schemas import (
+    ChatRequest,
+    ChatResponse,
+    UploadResponse,
+)
+from researchpilot.api.services import ResearchPilotService
+
+logger = logging.getLogger(__name__)
+
+MAX_UPLOAD_BYTES = 20 * 1024 * 1024
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.service = ResearchPilotService()
     yield
 
-app = FastAPI(title="ResearchPilot API", version="1.0.0", lifespan=lifespan)
+
+app = FastAPI(
+    title="ResearchPilot API",
+    description="Agentic RAG research assistant for academic PDFs",
+    version="1.0.0",
+    lifespan=lifespan,
+)
+
 
 @app.get("/health")
-def health():
+async def health():
     return {"status": "ok"}
 
-@app.get("/documents", response_model=list[DocumentInfo])
-def documents():
-    return app.state.service.list_documents()
 
-def save_and_index(filename: str, content: bytes):
-    try:
-        with fitz.open(stream=content, filetype="pdf") as document:
-            if document.is_encrypted or not document.page_count:
-                raise ValueError("Encrypted or empty PDF")
-            if not any(page.get_text("text").strip() for page in document):
-                raise ValueError("PDF contains no extractable text")
-    except Exception as exc:
-        raise HTTPException(status_code=400, detail=f"Invalid PDF: {exc}") from exc
+@app.get("/documents")
+async def list_documents():
     service = app.state.service
-    stem = re.sub(r"[^a-zA-Z0-9_-]", "_", Path(filename).stem)[:60] or "document"
-    saved_name = f"{stem}_{uuid.uuid4().hex[:12]}.pdf"
-    destination = service.pdf_dir / saved_name
-    with service.lock:
-        try:
-            destination.write_bytes(content)
-            count = service.rebuild_indexes()
-        except Exception:
-            destination.unlink(missing_ok=True)
-            try:
-                service.rebuild_indexes()
-            except Exception:
-                logging.exception("Could not restore index after failed upload")
-            raise
-    return UploadResponse(filename=saved_name, chunks_indexed=count, status="indexed")
+    return service.list_documents()
+
 
 @app.post("/documents/upload", response_model=UploadResponse)
-async def upload(file: UploadFile = File(...)):
+async def upload(file: Annotated[UploadFile, File()]):
     if not file.filename or not file.filename.lower().endswith(".pdf"):
-        raise HTTPException(status_code=400, detail="Only PDFs are supported")
-    content = await file.read(MAX_PDF_BYTES + 1)
-    if len(content) > MAX_PDF_BYTES:
-        raise HTTPException(status_code=413, detail="PDF exceeds 20 MB")
-    return await run_in_threadpool(save_and_index, file.filename, content)
+        raise HTTPException(
+            status_code=400,
+            detail="Only PDF files are supported",
+        )
+
+    content = await file.read(MAX_UPLOAD_BYTES + 1)
+
+    if len(content) > MAX_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail="PDF exceeds the 20 MB upload limit",
+        )
+
+    if not content.startswith(b"%PDF-"):
+        raise HTTPException(
+            status_code=400,
+            detail="Uploaded file is not a valid PDF",
+        )
+
+    service = app.state.service
+
+    saved_name = f"{uuid4().hex}_{Path(file.filename).name}"
+    destination = service.pdf_dir / saved_name
+
+    try:
+        destination.write_bytes(content)
+
+        count = await run_in_threadpool(service.rebuild_indexes)
+
+    except Exception:
+        logger.exception("Failed to index uploaded PDF")
+
+        destination.unlink(missing_ok=True)
+
+        try:
+            await run_in_threadpool(service.rebuild_indexes)
+        except Exception:
+            logger.exception("Could not restore index after failed upload")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to process uploaded PDF",
+        ) from None
+
+    return UploadResponse(
+        filename=saved_name,
+        chunks_indexed=count,
+        status="indexed",
+    )
+
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
-        result = await run_in_threadpool(app.state.service.ask, request.question,
-                                         request.retrieval_mode, request.max_attempts)
-        return ChatResponse(question=request.question, answer=result["answer"],
-                            sources=result["sources"], attempts=result["attempts"],
-                            trace=result["trace"])
+        result = await run_in_threadpool(
+            app.state.service.ask,
+            request.question,
+            request.retrieval_mode,
+            request.max_attempts,
+        )
+
+        return ChatResponse(
+            question=request.question,
+            answer=result["answer"],
+            sources=result["sources"],
+            attempts=result["attempts"],
+            trace=result["trace"],
+        )
+
     except Exception as exc:
-        logging.exception("Chat request failed")
-        raise HTTPException(status_code=500, detail="Unable to process question") from exc
+        logger.exception("Chat request failed")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to process question",
+        ) from exc
+
 
 @app.get("/evaluation/results")
-def evaluation_results():
-    if not BENCHMARK_PATH.exists():
-        return {"results": []}
-    return {"results": json.loads(BENCHMARK_PATH.read_text(encoding="utf-8"))}
+async def evaluation_results():
+    service = app.state.service
+    return service.evaluation_results()

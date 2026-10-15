@@ -1,15 +1,18 @@
 import threading
 from pathlib import Path
-from researchpilot.config import PDF_DIR, CHROMA_PATH, CORPUS_PATH, MODEL
-from researchpilot.vector_store import VectorStore
-from researchpilot.retrieval.corpus import build_corpus, save_corpus
-from researchpilot.retrieval.bm25 import BM25Retriever
-from researchpilot.retrieval.hybrid import HybridRetriever
-from researchpilot.agent.nodes import AgentNodes
+
 from researchpilot.agent.graph import build_agent, initial_state
+from researchpilot.agent.nodes import AgentNodes
+from researchpilot.config import CHROMA_PATH, CORPUS_PATH, MODEL, PDF_DIR
+from researchpilot.retrieval.bm25 import BM25Retriever
+from researchpilot.retrieval.corpus import build_corpus, save_corpus
+from researchpilot.retrieval.hybrid import HybridRetriever
+from researchpilot.vector_store import VectorStore
+
 
 class ResearchPilotService:
     """Single-process prototype: serialized reads and index rebuilds."""
+
     def __init__(self, pdf_dir=PDF_DIR, db_path=CHROMA_PATH):
         self.pdf_dir = Path(pdf_dir)
         self.pdf_dir.mkdir(parents=True, exist_ok=True)
@@ -44,5 +47,7 @@ class ResearchPilotService:
             return build_agent(nodes).invoke(initial_state(question, max_attempts))
 
     def list_documents(self):
-        return [{"filename": p.name, "size_bytes": p.stat().st_size}
-                for p in sorted(self.pdf_dir.glob("*.pdf"))]
+        return [
+            {"filename": p.name, "size_bytes": p.stat().st_size}
+            for p in sorted(self.pdf_dir.glob("*.pdf"))
+        ]

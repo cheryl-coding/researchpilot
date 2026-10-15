@@ -2,8 +2,10 @@ import math
 import re
 from collections import Counter, defaultdict
 
+
 def tokenize(text: str) -> list[str]:
-    return re.findall(r"\w+", text.lower())
+    return re.findall(r"\b\w+\b", text.lower())
+
 
 class BM25Retriever:
     def __init__(self, documents: list[dict], k1: float = 1.5, b: float = 0.75):
@@ -21,7 +23,7 @@ class BM25Retriever:
 
     def idf(self, term: str) -> float:
         df = self.doc_freq.get(term, 0)
-        return math.log(1 + (self.N - df + .5) / (df + .5))
+        return math.log(1 + (self.N - df + 0.5) / (df + 0.5))
 
     def score(self, query: str, index: int) -> float:
         if not self.avgdl:
@@ -32,13 +34,17 @@ class BM25Retriever:
         for term in set(tokenize(query)):
             f = counts.get(term, 0)
             if f:
-                score += self.idf(term) * (f * (self.k1 + 1)) / (
-                    f + self.k1 * (1 - self.b + self.b * length / self.avgdl))
+                score += (
+                    self.idf(term)
+                    * (f * (self.k1 + 1))
+                    / (f + self.k1 * (1 - self.b + self.b * length / self.avgdl))
+                )
         return score
 
     def search(self, query: str, top_k: int = 5) -> list[dict]:
         if top_k <= 0:
             raise ValueError("top_k must be positive")
         scored = [dict(doc, score=self.score(query, i)) for i, doc in enumerate(self.documents)]
-        return sorted((d for d in scored if d["score"] > 0),
-                      key=lambda d: (-d["score"], d["id"]))[:top_k]
+        return sorted((d for d in scored if d["score"] > 0), key=lambda d: (-d["score"], d["id"]))[
+            :top_k
+        ]

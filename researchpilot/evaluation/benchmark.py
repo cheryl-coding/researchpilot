@@ -1,12 +1,14 @@
 import json
 import statistics
 import time
-from researchpilot.config import CORPUS_PATH, DATA_DIR, BENCHMARK_PATH, CHROMA_PATH
-from researchpilot.retrieval.corpus import load_corpus
+
+from researchpilot.config import BENCHMARK_PATH, CHROMA_PATH, CORPUS_PATH, DATA_DIR
+from researchpilot.evaluation.metrics import recall_at_k, reciprocal_rank_at_k
 from researchpilot.retrieval.bm25 import BM25Retriever
+from researchpilot.retrieval.corpus import load_corpus
 from researchpilot.retrieval.hybrid import HybridRetriever
 from researchpilot.vector_store import VectorStore
-from researchpilot.evaluation.metrics import recall_at_k, reciprocal_rank_at_k
+
 
 def evaluate(retriever, questions, k=5):
     recalls, mrrs, latencies = [], [], []
@@ -18,8 +20,12 @@ def evaluate(retriever, questions, k=5):
         relevant = set(item["relevant_ids"])
         recalls.append(recall_at_k(ids, relevant, k))
         mrrs.append(reciprocal_rank_at_k(ids, relevant, k))
-    return {"recall_at_5": statistics.mean(recalls), "mrr_at_5": statistics.mean(mrrs),
-            "latency_ms": statistics.mean(latencies)}
+    return {
+        "recall_at_5": statistics.mean(recalls),
+        "mrr_at_5": statistics.mean(mrrs),
+        "latency_ms": statistics.mean(latencies),
+    }
+
 
 def main():
     corpus = load_corpus(CORPUS_PATH)
@@ -35,12 +41,16 @@ def main():
     if set(dense.collection.get(include=[])["ids"]) != ids:
         raise RuntimeError("Chroma and corpus IDs differ; reindex before benchmarking")
     rows = []
-    for name, retriever in {"BM25": bm25, "Dense": dense,
-                            "Hybrid": HybridRetriever(bm25, dense)}.items():
+    for name, retriever in {
+        "BM25": bm25,
+        "Dense": dense,
+        "Hybrid": HybridRetriever(bm25, dense),
+    }.items():
         rows.append({"method": name, **evaluate(retriever, questions)})
     BENCHMARK_PATH.parent.mkdir(parents=True, exist_ok=True)
     BENCHMARK_PATH.write_text(json.dumps(rows, indent=2))
     print(json.dumps(rows, indent=2))
+
 
 if __name__ == "__main__":
     main()
